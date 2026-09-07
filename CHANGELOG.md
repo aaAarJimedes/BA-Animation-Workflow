@@ -1,8 +1,12 @@
 # 0.10.0
 
-- Split plan compilation, rig state restoration, Action slot access and physics pre-roll into explicit modules, with compatibility imports retained.
-- Fix dead fallback slot selection previously placed after the pre-roll function return. Bind a preferred/matching/single slot, and roll back ambiguous multi-slot assignments.
-- Preserve the reverted 0.9.1 settle + transition buffer behavior, formal first-frame keys, placement, guard strength and FK/IK recovery.
-- Add BA prop contact/release baking with isolated Actions and restoration, and read-only low-speed/velocity diagnostics.
-- Keep one prompt per Clip; reject pasted control-document wrappers and show the 1000-character limit and exact scene FPS duration.
-- Regression coverage: prop transform accuracy and restore, multi-slot rollback, fractional FPS metadata, rotated placement, adjustable arm guard, first-frame buffer, paired seam idempotence/mode switch/failure rollback and planted-foot reuse.
+BA Animation Workflow 0.10.0：单段动作输入、道具接触与收尾检查。
+
+- 一个 Clip 对应一段动作提示，显示 N/1000 字符及当前 FPS 下的时长；拒绝把 Markdown/YAML 制作方案误当动作提示提交。
+- 新增独立道具持握/放下烘焙及恢复，保护已有动画；新增只读低速区间和手部/头部速度检查。
+- 拆分单段输入与时间计划模块，统一 Action 读取，保留接缝、防脚滑、旧工程属性和重复操作恢复。
+- 修复分数 FPS 元数据精度和中文帮助文字截断。
+
+Blender 5.1.2 验证通过：实际安装配置、42 个原有操作符、道具接触/撤回、模糊槽位回滚、帧率、真实工程接缝与脚接触回归。数字与适用限制见仓库 docs/VALIDATION_0.10.0.md。
+
+安装 ba_animation_workflow-0.10.0.zip；不要使用 GitHub 的 Source code ZIP 安装。第三方生成插件需独立安装。
