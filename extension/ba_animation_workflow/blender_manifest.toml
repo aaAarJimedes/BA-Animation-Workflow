@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "ba_animation_workflow"
-version = "0.9.0"
+version = "0.10.0"
 name = "BA Animation Workflow"
 tagline = "A guided one-stop anime character animation workspace"
 maintainer = "Local Workflow Toolkit"

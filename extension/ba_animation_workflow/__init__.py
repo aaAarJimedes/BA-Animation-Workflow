@@ -2,15 +2,13 @@ _needs_reload = "bpy" in locals()
 
 import bpy
 
-from . import auto_director, operators, panels, properties
+from . import auto_director, operators, panels, properties, finishing
 
 if _needs_reload:
     import importlib
 
-    properties = importlib.reload(properties)
-    auto_director = importlib.reload(auto_director)
-    operators = importlib.reload(operators)
-    panels = importlib.reload(panels)
+    for name in ['constants', 'utils', 'clip_plan', 'foot_contact', 'seam_smoothing', 'split_seam', 'properties', 'auto_director', 'operators', 'panels', 'finishing']:
+        importlib.reload(importlib.import_module("." + name, __package__))
 
 
 def register():
@@ -18,9 +16,11 @@ def register():
     auto_director.register()
     operators.register()
     panels.register()
+    finishing.register()
 
 
 def unregister():
+    finishing.unregister()
     panels.unregister()
     operators.unregister()
     auto_director.unregister()

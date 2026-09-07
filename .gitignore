@@ -13,3 +13,5 @@ tests/artifacts/
 *.mp4
 *.zip
 extension/ba_motion_bridge/
+tools/*
+!tools/build_latest.py

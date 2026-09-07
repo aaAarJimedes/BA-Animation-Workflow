@@ -173,11 +173,14 @@ def _draw_auto_mode(layout, context) -> None:
     if prompt is not None:
         content = prompt.as_string()
         line_count = len(content.splitlines()) if content else 0
-        _wrapped(inputs, context, f"{prompt.name} · {line_count} 行 · {len(content)} 字符", "FILE_TEXT")
+        count=len(content.strip())
+        _wrapped(inputs, context, f"{prompt.name} · {line_count} 行 · {count}/1000 字符", "ERROR" if count>1000 else "FILE_TEXT")
     else:
-        _wrapped(inputs, context, "首次打开会导入旧的短提示；之后可直接粘贴保留换行和缩进的完整结构。", "INFO")
+        _wrapped(inputs, context, "只粘贴当前 Clip 的英文动作内容；关键帧与约束请单独设置。", "INFO")
     _wrapped(inputs, context, "每次只输入并生成一个 Clip；检查通过后，再把时间轴移到下一段起点。", "INFO")
     inputs.prop(settings, "total_frames")
+    fps=context.scene.render.fps/context.scene.render.fps_base
+    inputs.label(text=f"沿用场景 {fps:g} FPS · {settings.total_frames/fps:.2f} 秒")
 
     status = layout.box()
     status.alert = settings.status_level == "ERROR"
@@ -477,7 +480,7 @@ class BAW_PT_main(bpy.types.Panel):
         ready_count = sum(_component_ready(name, status) for name in core)
 
         header = layout.box()
-        header.label(text="BA 动画工作台 0.9.0", icon="ANIM")
+        header.label(text="BA 动画工作台 0.10.0", icon="ANIM")
         header.label(
             text=f"核心 {ready_count}/{len(core)}",
             icon="CHECKMARK" if ready_count == len(core) else "ERROR",
