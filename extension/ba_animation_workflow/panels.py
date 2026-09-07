@@ -330,9 +330,10 @@ def _draw_motion_stage(layout, context) -> None:
         if _has_operator("ba_motion_bridge.activate_output"):
             result.operator(
                 "ba_motion_bridge.activate_output",
-                text="重新激活并预热物理",
+                text="重新激活动作与预热预览",
                 icon="PLAY",
             )
+            _wrapped(result, context, "预热预览不等于完成烘焙。正式物理输出请使用下方“MMD 物理与安全烘焙”。", "INFO")
     if (
         bridge.constraint_snapshot_json or bridge.previous_target_state_available
     ) and _has_operator("ba_motion_bridge.restore_previous_state"):
