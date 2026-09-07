@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+backups/
+dist/
+dev/
+config/
+skills/
+.test-runtime/
+tests/artifacts/
+*.blend
+*.blend1
+*.png
+*.mp4
+*.zip
+extension/ba_motion_bridge/
