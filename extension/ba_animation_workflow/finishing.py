@@ -160,15 +160,21 @@ class BAW_PT_finishing(bpy.types.Panel):
     bl_idname='BAW_PT_finishing';bl_label='道具接触与动作检查';bl_parent_id='BAW_PT_main'
     bl_category='BA 动画';bl_space_type='VIEW_3D';bl_region_type='UI';bl_options={'DEFAULT_CLOSED'}
     def draw(self,context):
+        from .panels import _wrapped
         l=self.layout;s=context.scene.baw_finishing
         l.prop(s,'rig');row=l.row(align=True);row.prop(s,'start');row.prop(s,'end')
         box=l.box();box.prop(s,'prop')
         if s.rig:box.prop_search(s,'bone',s.rig.data,'bones')
         else:box.prop(s,'bone')
-        box.label(text='先在开始帧把道具对齐手；手的现有动作驱动道具',icon='INFO')
-        box.operator('baw.prop_contact');box.operator('baw.prop_restore')
+        _wrapped(box,context,'先在开始帧把道具对齐手；手的现有动作驱动道具。结束帧作为放下时刻。','INFO')
+        box.operator('baw.prop_contact')
+        action=s.prop.animation_data.action if s.prop and s.prop.animation_data else None
+        row=box.row();row.enabled=bool(action and action.get('baw_contact_owner')==s.prop.name)
+        row.operator('baw.prop_restore')
+        if action and action.get('baw_contact_owner')!=s.prop.name:
+            _wrapped(box,context,'该道具已有独立动画；本工具会保留它，不能直接覆盖。','INFO')
         box=l.box();box.prop(s,'still_speed');box.prop(s,'min_hold');box.operator('baw.inspect_motion')
-        if s.status:l.label(text=s.status,icon='INFO')
+        if s.status:_wrapped(l,context,s.status,'INFO')
 
 
 CLASSES=(BAW_PG_finishing,BAW_OT_prop_contact,BAW_OT_prop_restore,BAW_OT_inspect_motion,BAW_PT_finishing)

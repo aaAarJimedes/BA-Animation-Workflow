@@ -23,3 +23,7 @@ Blender 5.1 的单段动作制作、复用和收尾工具。当前版本 **0.10.
 `extension/ba_animation_workflow/clip_plan.py` 负责单段输入和时间计划；`auto_director.py` 负责生成状态与复用协调；`foot_contact.py`、`seam_smoothing.py`、`split_seam.py` 分别处理脚接触和接缝；`finishing.py` 负责独立道具动作与只读诊断。Action 读取统一经过 `utils.iter_action_fcurves`。保留旧调用入口和场景属性，旧工程可继续打开。
 
 源码不包含角色、场景、第三方插件或账号设置。测试应在 Blender `--background --factory-startup` 中执行，真实工程回归只使用内存副本。
+
+## 构建与验证
+
+运行 `python tools/build_latest.py` 生成最新 ZIP 与 SHA256 清单。详细使用见 `docs/BA_ANIMATION_WORKFLOW_GUIDE.md`，验证记录见 `docs/VALIDATION_0.10.0.md`。不再使用旧整套配置安装器。

@@ -1,4 +1,4 @@
-import textwrap
+import unicodedata
 
 import bpy
 
@@ -44,13 +44,24 @@ def _wrap_width(context) -> int:
 def _wrapped(layout, context, text: str, icon: str = "NONE") -> None:
     if not text:
         return
-    lines = textwrap.wrap(
-        str(text),
-        width=_wrap_width(context),
-        break_long_words=True,
-        break_on_hyphens=False,
-    ) or [str(text)]
-    for index, line in enumerate(lines):
+    # CJK glyphs occupy about two Latin cells; counting codepoints clipped
+    # Chinese help text even though the same width fit English correctly.
+    width = _wrap_width(context)
+    lines = []
+    for paragraph in str(text).splitlines():
+        line = ""
+        used = 0
+        for char in paragraph:
+            cells = 2 if unicodedata.east_asian_width(char) in {"W", "F"} else 1
+            if line and used + cells > width:
+                lines.append(line.rstrip())
+                line, used = "", 0
+            if not line and char.isspace():
+                continue
+            line += char
+            used += cells
+        lines.append(line)
+    for index, line in enumerate(lines or [str(text)]):
         layout.label(text=line, icon=icon if index == 0 else "BLANK1")
 
 

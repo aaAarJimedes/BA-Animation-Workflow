@@ -73,8 +73,8 @@ versions: dict[str, list[int] | None] = {}
 version_expectations = {
     "BlendCap": (1, 0, 5),
     "BlendCap Motion Bridge": (0, 4, 0),
-    "BA Animation Workflow": (0, 9, 0),
-    "Proscenium Motion Bridge": (0, 9, 1),
+    "BA Animation Workflow": (0, 10, 0),
+    "Proscenium Motion Bridge": (0, 10, 0),
 }
 for label, expected_version in version_expectations.items():
     module = imported(label)
@@ -160,6 +160,7 @@ for name in required_operator_names:
 
 required_scene_rna = (
     "baw_settings",
+    "baw_finishing",
     "baw_auto_director",
     "ba_motion_bridge_settings",
     "blendcap_retarget_pairs",
@@ -180,7 +181,7 @@ for name in required_panels:
         errors.append(f"Panel unavailable: {name}")
 
 workflow_panels = sorted(name for name in dir(bpy.types) if name.startswith("BAW_PT_"))
-if workflow_panels != ["BAW_PT_main"]:
+if workflow_panels != ["BAW_PT_finishing", "BAW_PT_main"]:
     errors.append(f"redundant BA Workflow panels registered: {workflow_panels}")
 
 result = {
