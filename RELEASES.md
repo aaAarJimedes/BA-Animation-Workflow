@@ -3,7 +3,7 @@
 当前版本 **0.12.0**，Git 标签 `v0.12.0`。
 
 - Blender 扩展：`ba_animation_workflow-0.12.0.zip`
-- SHA256：`c0c2a0d42c00d97dad41e2436c77727b403bf4a1e95587925125152b9e57ef83`
+- SHA256：`acabb2c693ad2c62208878303351473283a3aab540265418982a054c012db867`
 - 技能：`blender-animation-polish-1.1.0.zip`，SHA256 `ff544f7a2d3a534cad334ebd6233be5714952714e4bd2379d7d7bce1ad6c27e2`
 
 插件ZIP只包含扩展代码；技能作为独立附件和源码 `skills/blender-animation-polish` 维护。本机插件安装包与逐文件清单位于 `D:/Agent Workspaces/Agent Delivery/BA_Animation_Workflow/releases/0.12.0`。技能包在 `Agent Delivery/Mama_Animation/Skills`。

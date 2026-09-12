@@ -140,4 +140,3 @@ def register():
 def unregister():
     for cls in reversed(CLASSES):
         bpy.utils.unregister_class(cls)
-

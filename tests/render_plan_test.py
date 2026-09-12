@@ -50,4 +50,3 @@ except ValueError:pass
 else:raise AssertionError('live physics accepted')
 ba.unregister();ba.register();ba.unregister()
 print('RENDER_PLAN_TEST_PASS')
-
