@@ -1,5 +1,7 @@
 # 验证记录
 
+归档说明（2026-09-07）：以下是历史执行记录，旧 `dist`、`backups` 和 `smoke_runs` 路径不保证仍存在，不应直接作为安装或恢复指令。此次整理前仅存的两组备份已迁至 `D:\Agent Workspaces\Agent Temp\BA_Animation_Workflow\backups`；旧测试工程、旧版本安装包及其余安装备份未在本任务现有目录中找到，本次未删除它们。当前交付以 `Agent Delivery/BA_Animation_Workflow/README.md` 为准。
+
 ## BA Animation Workflow 0.9.0：前后均分与成对恢复
 
 - 默认仍为「仅当前段」；新增均分总窗口，偶数均分，奇数给当前段多 1 帧。用位置 Hermite 和旋转球面曲线连接两侧；只修改窗口内共同骨骼通道，两段边界姿态一致。

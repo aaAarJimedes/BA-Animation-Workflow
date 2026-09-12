@@ -1,0 +1,4 @@
+interface:
+  display_name: "Blender 动画完善工作流"
+  short_description: "完善现有 Blender 动画：保护关键动作、修复交互与衔接、调节卡渲并验证交付"
+  default_prompt: "使用 $blender-animation-polish 检查这个 Blender 动画工程，在保留帧率、预热和关键动作的基础上完善交互、表演、镜头与卡渲，并输出可复核的工程和预览。"

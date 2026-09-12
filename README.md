@@ -1,10 +1,10 @@
 # BA Animation Workflow
 
-Blender 5.1 的单段动作制作、复用和收尾工具。当前版本 **0.11.0**。
+Blender 5.1 的单段动作制作、复用和收尾工具。当前版本 **0.12.0**。
 
 ## 使用
 
-安装 `ba_animation_workflow-0.11.0.zip`，在 `N → BA 动画` 中选择角色。生成依赖独立安装的 Proscenium 与 Proscenium Motion Bridge；两者不包含在本包内。
+安装 `ba_animation_workflow-0.12.0.zip`，在 `N → BA 动画` 中选择角色。生成依赖独立安装的 Proscenium 与 Proscenium Motion Bridge；两者不包含在本包内。
 
 - 一个 Clip 对应一个动作提示。编辑器只粘贴英文动作内容，帧数在面板设置。YAML、Markdown 包装和关键帧说明会明确报错，避免把整份制作方案当成动作提交。
 - 面板显示 `N/1000` 字符及按场景真实 FPS 计算的时长。插件不会为匹配示例擅自更改场景帧率。
@@ -24,6 +24,12 @@ Blender 5.1 的单段动作制作、复用和收尾工具。当前版本 **0.11.
 
 “检查停顿与速度”只采样手和头部，输出低速区间及峰值帧的文本报告。它不自动删帧，低速候选也不等同于错误；有意停留和接触姿态应保留。
 
+## 渲染规划与资源交付
+
+新增资源检查与安全打包：区分真实依赖、已内嵌素材和追加来源记录。可导出绑定已保存源版本的分段计划，保留 FPS 与预热，拒绝混用变更后的工程。计划仅用于规划，不会自动渲染或拼接。见 [交付说明](docs/DELIVERY_GUIDE.md)。
+
+可复用的 Codex 工作流随源码维护于 [skills/blender-animation-polish](skills/blender-animation-polish/SKILL.md)，不打入 Blender 扩展 ZIP。
+
 ## 开发结构
 
 `extension/ba_animation_workflow/clip_plan.py` 负责单段输入和时间计划；`auto_director.py` 负责生成状态与复用协调；`foot_contact.py`、`seam_smoothing.py`、`split_seam.py` 分别处理脚接触和接缝；`finishing.py` 负责独立道具动作与只读诊断。Action 读取统一经过 `utils.iter_action_fcurves`。保留旧调用入口和场景属性，旧工程可继续打开。
@@ -32,4 +38,6 @@ Blender 5.1 的单段动作制作、复用和收尾工具。当前版本 **0.11.
 
 ## 构建与验证
 
-运行 `python tools/build_latest.py` 生成最新 ZIP 与 SHA256 清单。详细使用见 `docs/BA_ANIMATION_WORKFLOW_GUIDE.md`，验证记录见 `docs/VALIDATION_0.10.0.md`。不再使用旧整套配置安装器。
+运行 `python tools/build_latest.py` 生成最新 ZIP 与 SHA256 清单，工作区内默认输出到 `D:\Agent Workspaces\Agent Delivery\BA_Animation_Workflow\releases\<版本>`。可用 `--output-dir` 指定测试输出目录；独立克隆仓库仍默认输出到仓库的 `dist`。详细使用见 `docs/BA_ANIMATION_WORKFLOW_GUIDE.md`，验证记录见 `docs/VALIDATION_0.10.0.md`。不再使用旧整套配置安装器。
+
+工作区配置备份位于 `D:\Agent Workspaces\Agent Temp\BA_Animation_Workflow\backups`；测试输出应放在同一任务临时目录下。`dependencies` 保留本工具历史集成所需的桥接与第三方安装包，不作为上游开发主库。

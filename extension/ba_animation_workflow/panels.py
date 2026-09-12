@@ -492,7 +492,7 @@ class BAW_PT_main(bpy.types.Panel):
         ready_count = sum(_component_ready(name, status) for name in core)
 
         header = layout.box()
-        header.label(text="BA 动画工作台 0.10.0", icon="ANIM")
+        header.label(text="BA 动画工作台 0.12.0", icon="ANIM")
         header.label(
             text=f"核心 {ready_count}/{len(core)}",
             icon="CHECKMARK" if ready_count == len(core) else "ERROR",

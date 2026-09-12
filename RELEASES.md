@@ -1,9 +1,11 @@
 # 发布包
 
-| 版本 | Blender 扩展安装包 | SHA256 |
-| --- | --- | --- |
-| 0.10.0 | ba_animation_workflow-0.10.0.zip | ca7636d8492ee0d6a3ba0e6d77f636390f90df271e6c69c094a444a99a598d47 |
+当前版本 **0.12.0**，Git 标签 `v0.12.0`。
 
-对应 Git 标签 `v0.10.0`。`tools/build_latest.py` 使用仓库中的扩展源码重建 ZIP；逐文件校验清单位于发布附件 `build-manifest.json`。
+- Blender 扩展：`ba_animation_workflow-0.12.0.zip`
+- SHA256：`c0c2a0d42c00d97dad41e2436c77727b403bf4a1e95587925125152b9e57ef83`
+- 技能：`blender-animation-polish-1.1.0.zip`，SHA256 `ff544f7a2d3a534cad334ebd6233be5714952714e4bd2379d7d7bce1ad6c27e2`
 
-本包不包含第三方生成插件、角色、场景或用户配置。详细变化见 CHANGELOG.md。
+插件ZIP只包含扩展代码；技能作为独立附件和源码 `skills/blender-animation-polish` 维护。本机插件安装包与逐文件清单位于 `D:/Agent Workspaces/Agent Delivery/BA_Animation_Workflow/releases/0.12.0`。技能包在 `Agent Delivery/Mama_Animation/Skills`。
+
+`tools/build_latest.py` 可重建扩展ZIP，`--output-dir` 可覆盖输出位置。插件不包含角色、场景、第三方生成插件或账号设置。验证见 `docs/VALIDATION_0.12.0.md`，功能见 `docs/DELIVERY_GUIDE.md`。

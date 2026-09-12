@@ -2,7 +2,7 @@ import bpy,sys,math,json,importlib.util
 from pathlib import Path
 from mathutils import Matrix,Vector
 ROOT=Path(__file__).resolve().parents[2]
-sys.path[:0]=[str(ROOT/'BA_Animation_Workflow/extension'),str(ROOT/'Proscenium-Motion-Bridge')]
+sys.path[:0]=[str(ROOT/'BA_Animation_Workflow/extension'),str(ROOT/'Motion_Bridge/Proscenium-Motion-Bridge')]
 import ba_animation_workflow as ba
 import proscenium_motion_bridge as pmb
 ba.register();pmb.register()

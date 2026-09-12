@@ -1,12 +1,18 @@
 """Build a deterministic Blender extension archive from this repository."""
 from pathlib import Path
-import tomllib,zipfile,hashlib,json
+import tomllib,zipfile,hashlib,json,argparse
 root=Path(__file__).resolve().parents[1]
 candidates=[p for p in [root/'extension/ba_animation_workflow/blender_manifest.toml',root/'proscenium_motion_bridge/blender_manifest.toml'] if p.exists()]
 if len(candidates)!=1:raise RuntimeError('Expected one maintained extension manifest')
 manifest=candidates[0];folder=manifest.parent
 meta=tomllib.loads(manifest.read_text(encoding='utf8'))
-dist=root/'dist';dist.mkdir(exist_ok=True)
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--output-dir', type=Path, help='Override the release output directory')
+args=parser.parse_args()
+default_dist=(root.parents[1]/'Agent Delivery'/root.name/'releases'/meta['version']
+              if root.parent.name=='Agent Tools' else root/'dist')
+dist=args.output_dir or default_dist
+dist.mkdir(parents=True,exist_ok=True)
 archive=dist/(meta['id']+'-'+meta['version']+'.zip');hashes={}
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
     for p in sorted(folder.rglob('*')):

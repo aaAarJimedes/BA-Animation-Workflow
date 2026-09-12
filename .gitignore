@@ -2,9 +2,11 @@ __pycache__/
 *.py[cod]
 backups/
 dist/
+dependencies/
 dev/
 config/
-skills/
+skills/*
+!skills/blender-animation-polish/
 .test-runtime/
 tests/artifacts/
 *.blend

@@ -2,7 +2,7 @@
 
 ## 安装与入口
 
-使用本仓库 `dist/ba_animation_workflow-0.10.0.zip`，在 Blender 5.1 的偏好设置中从磁盘安装并启用。面板位于 `N → BA 动画`。Motion Bridge 使用它自己的仓库和安装包。旧整套配置安装器已停用，避免还原旧版本或覆盖用户偏好。
+使用 `D:\Agent Workspaces\Agent Delivery\BA_Animation_Workflow\releases\0.12.0\ba_animation_workflow-0.12.0.zip`，在 Blender 5.1 的偏好设置中从磁盘安装并启用。面板位于 `N → BA 动画`。Motion Bridge 使用它自己的仓库和安装包。旧整套配置安装器已停用，避免还原旧版本或覆盖用户偏好。
 
 ## 一段动作的制作
 
@@ -32,3 +32,5 @@
 `python tools/build_latest.py` 从当前扩展源码生成确定性 ZIP 和逐文件 SHA256 清单。安装包不含第三方插件、角色、场景或账号设置。
 
 回归测试和限制见 `VALIDATION_0.10.0.md`。本目录其余研究与历史验证文档保留为背景材料，安装步骤以本页和 README 为准。
+
+渲染规划与资源打包见 [交付说明](DELIVERY_GUIDE.md)。

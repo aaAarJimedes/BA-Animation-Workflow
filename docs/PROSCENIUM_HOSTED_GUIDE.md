@@ -1,5 +1,7 @@
 # Animatica Proscenium Hosted 使用指导
 
+历史文档说明（2026-09-07）：此文记录旧环境，不代表当前安装状态。文中旧配置备份和 smoke 工程目前未在本任务目录找到，不能直接用于恢复。仍保留的第三方安装包位于下方更新路径；上游维护归属 Motion_Bridge。
+
 适用环境：Blender 5.1.2 / Proscenium 0.4.0  
 安装日期：2026-08-29  
 运行模式：Animatica Cloud（Hosted）
@@ -33,7 +35,7 @@ C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\5.1\scripts\ad
 官方安装包归档：
 
 ```text
-D:\Agent Workspaces\BA_Animation_Workflow\dist\third_party\animatica\proscenium-blender-0.4.0.zip
+D:\Agent Workspaces\Agent Tools\BA_Animation_Workflow\dependencies\third_party\animatica\proscenium-blender-0.4.0.zip
 ```
 
 安装前配置备份：
