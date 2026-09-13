@@ -1,8 +1,10 @@
 import unicodedata
+from functools import lru_cache
 
 import bpy
 
 from .utils import external_addon_status, operator_available
+from .constants import ADDON_VERSION
 
 
 def _operator(path: str):
@@ -38,7 +40,10 @@ def _bridge_settings(context):
 def _wrap_width(context) -> int:
     region = getattr(context, "region", None)
     width = getattr(region, "width", 300) if region is not None else 300
-    return max(18, min(52, int((width - 36) / 7)))
+    # Nested boxes, icon gutters and sidebar zoom consume more width than
+    # the raw region. Reserve space so Chinese labels do not get ellipsized.
+    scale = max(1.0, context.preferences.system.ui_scale)
+    return max(12, min(48, int((width / scale - 64) / 10)))
 
 
 def _wrapped(layout, context, text: str, icon: str = "NONE") -> None:
@@ -46,7 +51,13 @@ def _wrapped(layout, context, text: str, icon: str = "NONE") -> None:
         return
     # CJK glyphs occupy about two Latin cells; counting codepoints clipped
     # Chinese help text even though the same width fit English correctly.
-    width = _wrap_width(context)
+    for index, line in enumerate(_wrap_lines(str(text), _wrap_width(context))):
+        layout.label(text=line, icon=icon if index == 0 else "BLANK1")
+
+
+@lru_cache(maxsize=256)
+def _wrap_lines(text, width):
+    """Cache plain text only; never retain Blender contexts or data blocks."""
     lines = []
     for paragraph in str(text).splitlines():
         line = ""
@@ -61,8 +72,7 @@ def _wrapped(layout, context, text: str, icon: str = "NONE") -> None:
             line += char
             used += cells
         lines.append(line)
-    for index, line in enumerate(lines or [str(text)]):
-        layout.label(text=line, icon=icon if index == 0 else "BLANK1")
+    return tuple(lines or [text])
 
 
 def _primary(layout, operator: str, text: str, icon: str):
@@ -397,7 +407,7 @@ def _draw_delivery_stage(layout, context) -> None:
     box = layout.box()
     box.label(text="预览与交付", icon="OUTPUT")
     _primary(box, "baw.prepare_preview", "设置 720p 快速预览", "OUTPUT")
-    box.label(text="设置 Eevee、30 FPS、H.264 和项目预览路径", icon="INFO")
+    _wrapped(box, context, "设置 Eevee、H.264 和预览路径；保留原帧率、负帧及出片范围。", "INFO")
     _primary(box, "baw.audit", "运行交付检查", "CHECKMARK")
     box.label(text="检查动作、相机、灯光、贴图和输出设置", icon="INFO")
     _wrapped(box, context, settings.last_audit_summary, "INFO")
@@ -487,27 +497,33 @@ class BAW_PT_main(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         settings = context.scene.baw_settings
-        status = external_addon_status()
-        core = ("MMD Tools", "Proscenium", "Proscenium Motion Bridge")
-        ready_count = sum(_component_ready(name, status) for name in core)
+        layout.label(text="BA 动画工作台 " + '.'.join(map(str, ADDON_VERSION)), icon="ANIM")
+        scene = context.scene
+        fps = scene.render.fps / scene.render.fps_base
+        layout.label(text=f"{fps:g} FPS · {scene.frame_start}–{scene.frame_end} 帧", icon="TIME")
+        _draw_diagnostics(layout, context)
 
-        header = layout.box()
-        header.label(text="BA 动画工作台 0.12.0", icon="ANIM")
-        header.label(
-            text=f"核心 {ready_count}/{len(core)}",
-            icon="CHECKMARK" if ready_count == len(core) else "ERROR",
-        )
-        header.prop(settings, "workspace_mode", expand=True)
+
+class BAW_PT_workflow(bpy.types.Panel):
+    bl_idname = "BAW_PT_workflow"
+    bl_label = "动作制作与镜头"
+    bl_parent_id = "BAW_PT_main"
+    bl_category = "BA 动画"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        layout = self.layout
+        settings = context.scene.baw_settings
+        layout.prop(settings, "workspace_mode", expand=True)
 
         if settings.workspace_mode == "AUTO":
             _draw_auto_mode(layout, context)
         else:
             _draw_manual_mode(layout, context)
 
-        _draw_diagnostics(layout, context)
-
-
-CLASSES = (BAW_PT_main,)
+CLASSES = (BAW_PT_main, BAW_PT_workflow)
 
 
 def register():

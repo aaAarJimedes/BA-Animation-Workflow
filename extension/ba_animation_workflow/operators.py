@@ -381,7 +381,7 @@ class BAW_OT_create_pro_camera_rig(bpy.types.Operator):
 class BAW_OT_prepare_preview(bpy.types.Operator):
     bl_idname = "baw.prepare_preview"
     bl_label = "设置快速预览输出"
-    bl_description = "设置 720p/30fps/Eevee/H.264 预览参数"
+    bl_description = "设置 720p/Eevee/H.264 预览参数，保留工程帧率和动画范围"
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
@@ -390,8 +390,6 @@ class BAW_OT_prepare_preview(bpy.types.Operator):
         scene.render.resolution_x = 1280
         scene.render.resolution_y = 720
         scene.render.resolution_percentage = 100
-        scene.render.fps = 30
-        scene.render.fps_base = 1.0
         scene.render.image_settings.media_type = "VIDEO"
         scene.render.image_settings.file_format = "FFMPEG"
         scene.render.ffmpeg.format = "MPEG4"

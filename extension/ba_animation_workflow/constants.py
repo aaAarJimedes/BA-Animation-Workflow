@@ -1,4 +1,4 @@
-ADDON_VERSION = (0, 11, 0)
+ADDON_VERSION = (0, 14, 0)
 
 TOOL_ID = "ba_animation_workflow"
 TOOL_NAME = "BA Animation Workflow"

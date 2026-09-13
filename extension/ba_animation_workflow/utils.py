@@ -338,7 +338,12 @@ def module_enabled(token_options: tuple[str, ...]) -> bool:
 
 
 def external_addon_status() -> dict[str, bool]:
-    return {name: module_enabled(tokens) for name, tokens in EXTERNAL_ADDONS.items()}
+    # One live snapshot per query; enabling/disabling an extension is visible
+    # immediately, without an RNA-object cache or a timer.
+    modules = {addon.module.lower() for addon in bpy.context.preferences.addons}
+    modules.update(module.rsplit('.', 1)[-1] for module in tuple(modules))
+    return {name: any(token in modules for token in tokens)
+            for name, tokens in EXTERNAL_ADDONS.items()}
 
 
 def operator_available(operator) -> bool:

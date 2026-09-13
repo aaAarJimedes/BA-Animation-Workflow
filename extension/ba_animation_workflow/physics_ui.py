@@ -110,6 +110,7 @@ class BAW_PG_physics(bpy.types.PropertyGroup):
                         description='仅在模拟副本中校正多个关节高度一致的大幅偏移；无法可靠识别时停止并报告')
     substeps: IntProperty(name='每帧子步', default=0, min=0, max=1000, description='0 表示沿用工程设置')
     iterations: IntProperty(name='求解迭代', default=0, min=0, max=1000, description='0 表示沿用工程设置')
+    show_advanced: BoolProperty(name='高级求解设置', default=False)
     status: StringProperty(options={'SKIP_SAVE'})
 
 
@@ -137,6 +138,10 @@ class BAW_OT_physics_check(bpy.types.Operator):
     bl_idname = 'baw.physics_check'
     bl_label = '检查物理条件'
 
+    @classmethod
+    def poll(cls, context):
+        return not _jobs and bool(context.scene.baw_physics.rig)
+
     def execute(self, context):
         s = context.scene.baw_physics
         try:
@@ -159,7 +164,8 @@ class BAW_OT_physics_bake(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return not _jobs and context.mode == 'OBJECT'
+        settings = context.scene.baw_physics
+        return not _jobs and context.mode == 'OBJECT' and bool(settings.rig) and settings.start < settings.end
 
     def execute(self, context):
         s = context.scene.baw_physics
@@ -179,12 +185,14 @@ class BAW_OT_physics_bake(bpy.types.Operator):
     def modal(self, context, event):
         if event.type == 'ESC':
             self.cancel(context)
-            context.scene.baw_physics.status = '已取消；原动作和物理状态未改变'
+            self._job.scene.baw_physics.status = '已取消；原动作和物理状态未改变'
             return {'CANCELLED'}
         if event.type == 'TIMER':
-            context.scene.baw_physics.status = self._job.progress()
-            if context.area:
-                context.area.tag_redraw()
+            status = self._job.progress()
+            if self._job.scene.baw_physics.status != status:
+                self._job.scene.baw_physics.status = status
+                if context.area:
+                    context.area.tag_redraw()
             if self._job.process.poll() is not None:
                 return self._finish(context)
         return {'RUNNING_MODAL'}
@@ -193,13 +201,13 @@ class BAW_OT_physics_bake(bpy.types.Operator):
         self._remove_timer(context)
         try:
             result = self._job.finish()
-            s = context.scene.baw_physics
+            s = self._job.scene.baw_physics
             s.status = f"已验证并应用 {len(result['basis'])} 帧物理动作；原动作可恢复。请播放检查头发与衣物表现"
             self.report({'INFO'}, s.status)
             return {'FINISHED'}
         except Exception as exc:
             self._job.close(keep_logs=True)
-            context.scene.baw_physics.status = str(exc)
+            self._job.scene.baw_physics.status = str(exc)
             self.report({'ERROR'}, str(exc))
             return {'CANCELLED'}
 
@@ -250,13 +258,15 @@ class BAW_PT_physics(bpy.types.Panel):
         row.prop(s, 'start')
         row.prop(s, 'end')
         _wrapped(col, context, '起始帧包含实际预热动作。保留原 FPS、正式出片范围和负帧。')
-        col.prop(s, 'align')
-        row = col.row(align=True)
-        row.prop(s, 'substeps')
-        row.prop(s, 'iterations')
-        _wrapped(col, context, '求解参数为 0 时沿用工程设置。提高参数不能修复刚体错位。')
-        col.operator('baw.physics_check', icon='CHECKMARK')
-        col.operator('baw.physics_bake', icon='PHYSICS')
+        col.prop(s, 'show_advanced', toggle=True, icon='SETTINGS')
+        if s.show_advanced:
+            col.prop(s, 'align')
+            row = col.row(align=True)
+            row.prop(s, 'substeps')
+            row.prop(s, 'iterations')
+            _wrapped(col, context, '求解参数为 0 时沿用工程设置。提高参数不能修复刚体错位。')
+        col.operator('baw.physics_check', text='1 · 检查物理条件', icon='CHECKMARK')
+        col.operator('baw.physics_bake', text='2 · 安全烘焙并应用', icon='PHYSICS')
         _wrapped(col, context, '完成后使用独立物理 Action，暂停实时物理；可任意跳帧及保存重开。模拟期间 Esc 取消。')
         row = col.row()
         row.enabled = bool(s.rig and physics.BACKUP in s.rig)
