@@ -49,3 +49,5 @@ Blender 5.1 的单段动作制作、复用和收尾工具。当前版本 **0.14.
 运行 `python tools/build_latest.py` 生成最新 ZIP 与 SHA256 清单，工作区内默认输出到 `D:\Agent Workspaces\Agent Delivery\BA_Animation_Workflow\releases\<版本>`。可用 `--output-dir` 指定测试输出目录；独立克隆仓库仍默认输出到仓库的 `dist`。详细使用见 `docs/BA_ANIMATION_WORKFLOW_GUIDE.md`，验证记录见 `docs/VALIDATION_0.10.0.md`。不再使用旧整套配置安装器。
 
 工作区配置备份位于 `D:\Agent Workspaces\Agent Temp\BA_Animation_Workflow\backups`；测试输出应放在同一任务临时目录下。`dependencies` 保留本工具历史集成所需的桥接与第三方安装包，不作为上游开发主库。
+
+正式发行包与所有历史版本见 [发布包](RELEASES.md)；后续维护遵循 [GitHub 交付规则](docs/GITHUB_DELIVERY.md)。
